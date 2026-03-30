@@ -1,9 +1,8 @@
 import uuid
+import enum
 from sqlalchemy import Column, String, Integer, Boolean, DateTime, Enum, Text
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 from app.database import Base
-import enum
 
 class TournamentType(str, enum.Enum):
     ELIMINATION = "elimination"
@@ -28,7 +27,7 @@ class TournamentStatus(str, enum.Enum):
 class Tournament(Base):
     __tablename__ = "tournaments"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     slug = Column(String(12), unique=True, nullable=False)
     name = Column(String(100), nullable=False)
     logo_url = Column(String(255), nullable=True)

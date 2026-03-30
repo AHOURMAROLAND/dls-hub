@@ -1,9 +1,8 @@
 import uuid
+import enum
 from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey, Enum, JSON
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 from app.database import Base
-import enum
 
 class MatchStatus(str, enum.Enum):
     SCHEDULED = "scheduled"
@@ -24,10 +23,10 @@ class MatchPhase(str, enum.Enum):
 class Match(Base):
     __tablename__ = "matches"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    tournament_id = Column(UUID(as_uuid=True), ForeignKey("tournaments.id"), nullable=False)
-    home_player_id = Column(UUID(as_uuid=True), ForeignKey("players.id"), nullable=False)
-    away_player_id = Column(UUID(as_uuid=True), ForeignKey("players.id"), nullable=False)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    tournament_id = Column(String(36), ForeignKey("tournaments.id"), nullable=False)
+    home_player_id = Column(String(36), ForeignKey("players.id"), nullable=False)
+    away_player_id = Column(String(36), ForeignKey("players.id"), nullable=False)
     home_score = Column(Integer, nullable=True)
     away_score = Column(Integer, nullable=True)
     home_score_agg = Column(Integer, nullable=True)

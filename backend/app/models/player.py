@@ -1,9 +1,8 @@
 import uuid
+import enum
 from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey, Enum
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 from app.database import Base
-import enum
 
 class PlayerStatus(str, enum.Enum):
     PENDING = "pending"
@@ -13,8 +12,8 @@ class PlayerStatus(str, enum.Enum):
 class Player(Base):
     __tablename__ = "players"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    tournament_id = Column(UUID(as_uuid=True), ForeignKey("tournaments.id"), nullable=False)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    tournament_id = Column(String(36), ForeignKey("tournaments.id"), nullable=False)
     session_token = Column(String(64), nullable=False)
     pseudo = Column(String(50), nullable=False)
     dll_idx = Column(String(20), nullable=False)
